@@ -1,5 +1,7 @@
 package model;
 
+import model.exceptions.NegativeException;
+
 public class ProdutoFisico extends Produto{
 	private Double peso;
 	private Double dimensoes;
@@ -18,7 +20,10 @@ public class ProdutoFisico extends Produto{
 		return peso;
 	}
 
-	public void setPeso(Double peso) {
+	public void setPeso(Double peso) throws NegativeException{
+		if(peso < 0) {
+			throw new NegativeException("O peso não pode ser negativo.");
+		}
 		this.peso = peso;
 	}
 
@@ -26,7 +31,10 @@ public class ProdutoFisico extends Produto{
 		return dimensoes;
 	}
 
-	public void setDimensoes(Double dimensoes) {
+	public void setDimensoes(Double dimensoes) throws NegativeException {
+		if(dimensoes < 0) {
+			throw new NegativeException("As dimensões não podem ser negativas.");
+		}
 		this.dimensoes = dimensoes;
 	}
 

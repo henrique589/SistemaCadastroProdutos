@@ -1,5 +1,7 @@
 package model;
 
+import model.exceptions.NegativeException;
+
 public class ProdutoDigital extends Produto{
 	private Double tamanhoDoArquivo;
 	
@@ -16,7 +18,10 @@ public class ProdutoDigital extends Produto{
 		return tamanhoDoArquivo;
 	}
 
-	public void setTamanhoDoArquivo(Double tamanhoDoArquivo) {
+	public void setTamanhoDoArquivo(Double tamanhoDoArquivo) throws NegativeException{
+		if(tamanhoDoArquivo < 0) {
+			throw new NegativeException("O tamanho do arquivo não pode ser negativo.");
+		}
 		this.tamanhoDoArquivo = tamanhoDoArquivo;
 	}
 

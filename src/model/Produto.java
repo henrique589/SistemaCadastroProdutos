@@ -1,5 +1,8 @@
 package model;
 
+import model.exceptions.EmptyException;
+import model.exceptions.NegativeException;
+
 public abstract class Produto {
 	private Integer id;
 	private String nome;
@@ -18,7 +21,10 @@ public abstract class Produto {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Integer id) throws NegativeException{
+		if(id < 0) {
+			throw new NegativeException("O id não pode ser negativo.");
+		}
 		this.id = id;
 	}
 
@@ -26,7 +32,10 @@ public abstract class Produto {
 		return nome;
 	}
 
-	public void setNome(String nome) {
+	public void setNome(String nome) throws EmptyException{
+		if(nome.isEmpty()) {
+			throw new EmptyException("O nome deve ser preenchido.");
+		}
 		this.nome = nome;
 	}
 
@@ -34,7 +43,10 @@ public abstract class Produto {
 		return preco;
 	}
 
-	public void setPreco(Double preco) {
+	public void setPreco(Double preco) throws NegativeException{
+		if(preco < 0) {
+			throw new NegativeException("O preço não pode ser negativo.");
+		}
 		this.preco = preco;
 	}
 }
