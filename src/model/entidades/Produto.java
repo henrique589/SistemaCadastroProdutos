@@ -1,7 +1,7 @@
 package model.entidades;
 
-import model.exceptions.EmptyException;
-import model.exceptions.NegativeException;
+import model.entidades.exception.EmptyException;
+import model.entidades.exception.NegativeException;
 
 public abstract class Produto {
 	private Integer id;

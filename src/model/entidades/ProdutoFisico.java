@@ -1,6 +1,6 @@
 package model.entidades;
 
-import model.exceptions.NegativeException;
+import model.entidades.exception.NegativeException;
 
 public class ProdutoFisico extends Produto{
 	private Double peso;

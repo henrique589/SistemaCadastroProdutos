@@ -1,6 +1,6 @@
 package model.entidades;
 
-import model.exceptions.NegativeException;
+import model.entidades.exception.NegativeException;
 
 public class ProdutoDigital extends Produto{
 	private Double tamanhoDoArquivo;
