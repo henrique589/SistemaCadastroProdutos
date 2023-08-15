@@ -5,6 +5,7 @@ public class ProdutoFisico extends Produto{
 	private Double dimensoes;
 	
 	public ProdutoFisico() {
+		super();
 	}
 
 	public ProdutoFisico(Integer id, String nome, Double preco, Double peso, Double dimensoes) {
