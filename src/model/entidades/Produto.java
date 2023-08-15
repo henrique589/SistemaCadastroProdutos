@@ -1,4 +1,4 @@
-package model;
+package model.entidades;
 
 import model.exceptions.EmptyException;
 import model.exceptions.NegativeException;
