@@ -1,18 +1,22 @@
 package view;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JRadioButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ButtonGroup;
-import javax.swing.JTextField;
-import javax.swing.JSeparator;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import model.entidades.ProdutoDigital;
 
 public class TelaCadastro extends JFrame {
 
@@ -40,13 +44,29 @@ public class TelaCadastro extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JRadioButton rdProdutoFisico = new JRadioButton("Produto Físico");
+		rdProdutoFisico.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tfPeso.setEditable(true);
+				tfDimensoes.setEditable(true);
+				tfTamanhoArquivo.setEditable(false);
+				tfTamanhoArquivo.setText("");
+			}
+		});
 		buttonGroup.add(rdProdutoFisico);
 		rdProdutoFisico.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		rdProdutoFisico.setSelected(true);
 		rdProdutoFisico.setBounds(132, 32, 121, 23);
 		contentPane.add(rdProdutoFisico);
 		
 		JRadioButton rdProdutoDigital = new JRadioButton("Produto Digital");
+		rdProdutoDigital.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tfTamanhoArquivo.setEditable(true);
+				tfPeso.setEditable(false);
+				tfPeso.setText("");
+				tfDimensoes.setEditable(false);
+				tfDimensoes.setText("");
+			}
+		});
 		buttonGroup.add(rdProdutoDigital);
 		rdProdutoDigital.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		rdProdutoDigital.setBounds(378, 33, 140, 23);
@@ -87,6 +107,19 @@ public class TelaCadastro extends JFrame {
 		contentPane.add(separator);
 		
 		JButton btnNewButton = new JButton("Finalizar Cadastro");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int id = Integer.parseInt(tfId.getText());
+				String nome = tfNome.getText();
+				double preco = Double.parseDouble(tfPreco.getText());
+				double tamanhoArquivo = Double.parseDouble(tfTamanhoArquivo.getText());
+				if(rdProdutoDigital.isSelected()) {
+					ProdutoDigital produtoDigital = new ProdutoDigital(id, nome, preco, tamanhoArquivo);
+					JOptionPane.showMessageDialog(null, "Produto Cadastrado" + "\n" + produtoDigital);
+				}
+				
+			}
+		});
 		btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		btnNewButton.setBounds(236, 335, 180, 23);
 		contentPane.add(btnNewButton);
