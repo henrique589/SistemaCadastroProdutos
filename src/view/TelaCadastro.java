@@ -3,18 +3,11 @@ package view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
@@ -22,10 +15,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import model.entidades.ProdutoDigital;
+import controle.ProdutoDigitalControle;
+import controle.ProdutoFisicoControle;
 
 public class TelaCadastro extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextField tfId;
@@ -112,6 +107,7 @@ public class TelaCadastro extends JFrame {
 		separator.setBounds(10, 206, 639, 2);
 		contentPane.add(separator);
 		
+		// Botão de finalizar cadastro.
 		JButton btnNewButton = new JButton("Finalizar Cadastro");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -121,17 +117,13 @@ public class TelaCadastro extends JFrame {
 				double preco = Double.parseDouble(tfPreco.getText());
 				if(rdProdutoDigital.isSelected()) {
 					double tamanhoArquivo = Double.parseDouble(tfTamanhoArquivo.getText());
-					ProdutoDigital produtoDigital = new ProdutoDigital(id, nome, preco, tamanhoArquivo);
-					JOptionPane.showMessageDialog(null, "Produto Cadastrado" + "\n" + produtoDigital);
-					File file = new File("c:\\temp\\bancoDeDados.txt");
-					try(BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))){
-							bw.write(produtoDigital.getId() + ", " + produtoDigital.getNome() + ", " + String.format("%.2f", produtoDigital.getPreco()) + 
-									", " + produtoDigital.getTamanhoDoArquivo());
-							bw.newLine();
-						}
-					catch(IOException e1) {
-						System.out.println("Error: " + e1.getMessage());
-					}
+					// Cadastro do produto digital.
+					ProdutoDigitalControle.cadastraProdutoDigital(id, nome, preco, tamanhoArquivo);
+				}else {
+					double peso = Double.parseDouble(tfPeso.getText());
+					double dimensoes = Double.parseDouble(tfDimensoes.getText());
+					// Cadastro do produto físico.
+					ProdutoFisicoControle.cadastraProdutoFisico(id, nome, preco, peso, dimensoes);
 				}
 			}
 		});
