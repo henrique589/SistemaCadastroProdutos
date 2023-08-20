@@ -3,6 +3,12 @@ package view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -109,15 +115,24 @@ public class TelaCadastro extends JFrame {
 		JButton btnNewButton = new JButton("Finalizar Cadastro");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Leitura dos campos.
 				int id = Integer.parseInt(tfId.getText());
 				String nome = tfNome.getText();
 				double preco = Double.parseDouble(tfPreco.getText());
-				double tamanhoArquivo = Double.parseDouble(tfTamanhoArquivo.getText());
 				if(rdProdutoDigital.isSelected()) {
+					double tamanhoArquivo = Double.parseDouble(tfTamanhoArquivo.getText());
 					ProdutoDigital produtoDigital = new ProdutoDigital(id, nome, preco, tamanhoArquivo);
 					JOptionPane.showMessageDialog(null, "Produto Cadastrado" + "\n" + produtoDigital);
+					File file = new File("c:\\temp\\bancoDeDados.txt");
+					try(BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))){
+							bw.write(produtoDigital.getId() + ", " + produtoDigital.getNome() + ", " + String.format("%.2f", produtoDigital.getPreco()) + 
+									", " + produtoDigital.getTamanhoDoArquivo());
+							bw.newLine();
+						}
+					catch(IOException e1) {
+						System.out.println("Error: " + e1.getMessage());
+					}
 				}
-				
 			}
 		});
 		btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
