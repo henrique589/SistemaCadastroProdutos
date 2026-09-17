@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/produtos">
+      <i class="bi bi-box-seam"></i> Cadastro de Produtos
+    </a>
+    <a class="nav-link text-light-emphasis small" href="/swagger-ui.html" target="_blank" rel="noopener">
+      API docs <i class="bi bi-box-arrow-up-right"></i>
+    </a>
+  </div>
+</nav>
+
+<main class="container pb-5">
+  @if (notificacao.atual(); as n) {
+    <div class="alert alert-dismissible fade show" [ngClass]="'alert-' + n.tipo" role="alert">
+      {{ n.mensagem }}
+      <button type="button" class="btn-close" aria-label="Fechar" (click)="notificacao.fechar()"></button>
+    </div>
+  }
+  <router-outlet></router-outlet>
+</main>
