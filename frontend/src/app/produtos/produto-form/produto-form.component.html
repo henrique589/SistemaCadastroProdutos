@@ -1,0 +1,84 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/produtos">Produtos</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ editando ? 'Editar' : 'Novo' }}</li>
+  </ol>
+</nav>
+
+<h1 class="h3 mb-3">{{ editando ? 'Editar produto' : 'Novo produto' }}</h1>
+
+@if (carregando()) {
+  <div class="text-center py-5 text-secondary">
+    <div class="spinner-border" role="status"></div>
+  </div>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="col-lg-8">
+
+    @if (erroApi(); as erro) {
+      <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>{{ erro }}</div>
+      </div>
+    }
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="tipo" class="form-label">Tipo <span class="text-danger">*</span></label>
+        <select id="tipo" class="form-select" formControlName="tipo">
+          @for (t of tipos; track t.valor) {
+            <option [value]="t.valor">{{ t.rotulo }}</option>
+          }
+        </select>
+        @if (editando) {
+          <div class="form-text">O tipo não pode ser alterado após o cadastro.</div>
+        }
+      </div>
+
+      <div class="col-md-8">
+        <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+        <input id="nome" type="text" class="form-control" formControlName="nome" maxlength="120"
+               [class.is-invalid]="invalido('nome')" />
+        <div class="invalid-feedback">Informe um nome (até 120 caracteres).</div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="preco" class="form-label">Preço (R$) <span class="text-danger">*</span></label>
+        <input id="preco" type="number" min="0" step="0.01" class="form-control" formControlName="preco"
+               [class.is-invalid]="invalido('preco')" />
+        <div class="invalid-feedback">Informe um preço maior ou igual a zero.</div>
+      </div>
+
+      @if (tipo === 'FISICO') {
+        <div class="col-md-4">
+          <label for="pesoKg" class="form-label">Peso (kg) <span class="text-danger">*</span></label>
+          <input id="pesoKg" type="number" min="0" step="0.001" class="form-control" formControlName="pesoKg"
+                 [class.is-invalid]="invalido('pesoKg')" />
+          <div class="invalid-feedback">Informe o peso (≥ 0).</div>
+        </div>
+        <div class="col-md-4">
+          <label for="dimensoesCm" class="form-label">Dimensões (cm) <span class="text-danger">*</span></label>
+          <input id="dimensoesCm" type="number" min="0" step="0.1" class="form-control" formControlName="dimensoesCm"
+                 [class.is-invalid]="invalido('dimensoesCm')" />
+          <div class="invalid-feedback">Informe as dimensões (≥ 0).</div>
+        </div>
+      } @else {
+        <div class="col-md-4">
+          <label for="tamanhoArquivoMb" class="form-label">Tamanho do arquivo (MB) <span class="text-danger">*</span></label>
+          <input id="tamanhoArquivoMb" type="number" min="0" step="0.1" class="form-control"
+                 formControlName="tamanhoArquivoMb" [class.is-invalid]="invalido('tamanhoArquivoMb')" />
+          <div class="invalid-feedback">Informe o tamanho do arquivo (≥ 0).</div>
+        </div>
+      }
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="salvando()">
+        @if (salvando()) {
+          <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+        }
+        {{ editando ? 'Salvar alterações' : 'Cadastrar' }}
+      </button>
+      <a routerLink="/produtos" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+  </form>
+}

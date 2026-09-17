@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Produtos</h1>
+  <a routerLink="/produtos/novo" class="btn btn-primary">
+    <i class="bi bi-plus-lg me-1"></i> Novo produto
+  </a>
+</div>
+
+<form class="row g-2 align-items-end mb-3" (ngSubmit)="filtrar()">
+  <div class="col-sm-5 col-md-4">
+    <label for="filtroNome" class="form-label">Nome</label>
+    <input id="filtroNome" name="nome" class="form-control" placeholder="Buscar por nome"
+           [(ngModel)]="filtro.nome" />
+  </div>
+  <div class="col-sm-4 col-md-3">
+    <label for="filtroTipo" class="form-label">Tipo</label>
+    <select id="filtroTipo" name="tipo" class="form-select" [(ngModel)]="filtro.tipo">
+      <option value="">Todos</option>
+      @for (t of tipos; track t.valor) {
+        <option [value]="t.valor">{{ t.rotulo }}</option>
+      }
+    </select>
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-outline-primary">
+      <i class="bi bi-search me-1"></i> Filtrar
+    </button>
+    <button type="button" class="btn btn-outline-secondary ms-1" (click)="limparFiltro()">Limpar</button>
+  </div>
+</form>
+
+@if (carregando()) {
+  <div class="text-center py-5 text-secondary">
+    <div class="spinner-border" role="status"></div>
+    <div class="mt-2">Carregando...</div>
+  </div>
+} @else {
+@if (pagina(); as p) {
+  @if (p.content.length === 0) {
+    <div class="alert alert-light border text-center py-4">
+      Nenhum produto encontrado.
+      <a routerLink="/produtos/novo">Cadastrar o primeiro</a>
+    </div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Tipo</th>
+            <th scope="col" class="text-end">Preço</th>
+            <th scope="col">Detalhes</th>
+            <th scope="col" class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (produto of p.content; track produto.id) {
+            <tr>
+              <td class="text-secondary">{{ produto.id }}</td>
+              <td>{{ produto.nome }}</td>
+              <td><span class="badge" [ngClass]="classeTipo(produto.tipo)">{{ rotuloTipo(produto.tipo) }}</span></td>
+              <td class="text-end">{{ produto.preco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+              <td class="text-secondary small">{{ detalhes(produto) }}</td>
+              <td class="text-end text-nowrap">
+                <a [routerLink]="['/produtos', produto.id, 'editar']" class="btn btn-sm btn-outline-secondary me-1"
+                   title="Editar"><i class="bi bi-pencil"></i></a>
+                <button type="button" class="btn btn-sm btn-outline-danger" title="Excluir"
+                        [disabled]="excluindoId() === produto.id" (click)="excluir(produto)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center">
+      <small class="text-secondary">{{ p.totalElements }} produto(s)</small>
+      @if (p.totalPages > 1) {
+        <nav aria-label="Paginação">
+          <ul class="pagination pagination-sm mb-0">
+            <li class="page-item" [class.disabled]="p.number === 0">
+              <button class="page-link" (click)="irParaPagina(p.number - 1)">Anterior</button>
+            </li>
+            <li class="page-item disabled"><span class="page-link">{{ p.number + 1 }} / {{ p.totalPages }}</span></li>
+            <li class="page-item" [class.disabled]="p.number >= p.totalPages - 1">
+              <button class="page-link" (click)="irParaPagina(p.number + 1)">Próxima</button>
+            </li>
+          </ul>
+        </nav>
+      }
+    </div>
+  }
+}
+}

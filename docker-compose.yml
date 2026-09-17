@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cadastro_produtos
+      POSTGRES_USER: cadastro
+      POSTGRES_PASSWORD: cadastro
+    ports:
+      # Porta do host configurável para não colidir com outro Postgres local
+      - "${DB_HOST_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cadastro -d cadastro_produtos"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: cadastro_produtos
+      DB_USER: cadastro
+      DB_PASSWORD: cadastro
+      CORS_ORIGINS: http://localhost:4200,http://localhost
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
